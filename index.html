@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Re-Bath of New England — Sales Rep Scorecard MTD</title>
+<meta name="viewport" content="width=1920, initial-scale=1" />
+<meta http-equiv="refresh" content="300" />
+<style>
+  :root {
+    color-scheme: light;
+    --rb-red: #A90533;
+    --rb-slate: #435465;
+    --rb-white: #FFFFFF;
+    --rb-clean-blue: #8CB6C9;
+    --rb-dark-grey: #6D6E70;
+    --rb-light-grey: #EEEEEE;
+    --rb-maroon: #5E3B3F;
+    --rb-green: #2E7D32;
+    --rb-font-heading: Georgia, 'Times New Roman', serif;
+    --rb-font-body: Arial, Helvetica, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin: 0; font-family: var(--rb-font-body); color: var(--rb-dark-grey); background: var(--rb-white); font-size: 22px; line-height: 1.35; overflow: auto; }
+  .wrap { padding: 28px 36px; min-height: 100vh; display: flex; flex-direction: column; }
+  header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 18px; border-bottom: 3px solid var(--rb-clean-blue); margin-bottom: 22px; }
+  .brand { display: flex; align-items: baseline; gap: 18px; }
+  .brand-mark { font-family: var(--rb-font-heading); font-weight: bold; font-size: 56px; color: var(--rb-red); letter-spacing: -1px; line-height: 1; }
+  .brand-sub { font-family: var(--rb-font-body); font-weight: bold; color: var(--rb-slate); font-size: 22px; text-transform: uppercase; letter-spacing: 2.5px; }
+  .title { text-align: right; }
+  .title .t1 { font-family: var(--rb-font-heading); color: var(--rb-slate); font-size: 38px; font-weight: bold; line-height: 1; }
+  .title .t2 { font-size: 16px; color: var(--rb-dark-grey); margin-top: 8px; letter-spacing: 1.5px; text-transform: uppercase; }
+  .title .t2 strong { color: var(--rb-slate); }
+  .kpi-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; margin-bottom: 22px; }
+  .kpi { background: var(--rb-white); border: 3px solid var(--rb-clean-blue); border-radius: 6px; padding: 22px; }
+  .kpi .label { font-size: 14px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--rb-dark-grey); font-weight: bold; margin-bottom: 12px; }
+  .kpi .value { font-family: var(--rb-font-heading); font-size: 58px; color: var(--rb-slate); font-weight: bold; line-height: 1; }
+  .kpi .sub { font-size: 15px; color: var(--rb-dark-grey); margin-top: 10px; }
+  .card { background: var(--rb-white); border: 1px solid var(--rb-light-grey); border-radius: 6px; padding: 22px 28px; flex: 1; display: flex; flex-direction: column; min-height: 0; }
+  .card h2 { font-family: var(--rb-font-heading); color: var(--rb-slate); margin: 0 0 16px 0; font-size: 28px; }
+  table { width: 100%; border-collapse: collapse; font-size: 22px; }
+  th { font-family: var(--rb-font-body); font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; font-size: 14px; color: var(--rb-slate); text-align: right; padding: 12px 10px; border-bottom: 3px solid var(--rb-slate); }
+  th:first-child, td:first-child { text-align: left; }
+  td { padding: 13px 10px; text-align: right; border-bottom: 1px solid var(--rb-light-grey); }
+  td.rep-name { color: var(--rb-slate); font-weight: bold; font-size: 22px; }
+  tr.total td { font-weight: bold; color: var(--rb-slate); border-top: 3px solid var(--rb-slate); border-bottom: none; background: var(--rb-light-grey); font-size: 22px; }
+  .pill { display: inline-block; padding: 5px 14px; border-radius: 16px; font-size: 18px; font-weight: bold; min-width: 72px; text-align: center; }
+  .pill.good { background: rgba(46, 125, 50, 0.12); color: var(--rb-green); }
+  .pill.warn { background: rgba(169, 5, 51, 0.12); color: var(--rb-red); }
+  .pill.neutral { background: var(--rb-light-grey); color: var(--rb-dark-grey); }
+  .rank { color: var(--rb-dark-grey); font-weight: normal; margin-right: 10px; display: inline-block; min-width: 28px; }
+  .rank.top { color: var(--rb-red); font-weight: bold; }
+  footer { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--rb-light-grey); font-size: 14px; color: var(--rb-dark-grey); display: flex; justify-content: space-between; }
+  .err { padding: 28px; border: 3px solid var(--rb-red); background: rgba(169, 5, 51, 0.05); border-radius: 6px; color: var(--rb-red); font-weight: bold; font-size: 22px; }
+  .loading { padding: 28px; color: var(--rb-dark-grey); font-style: italic; font-size: 22px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><span class="brand-mark">RE&middot;BATH</span><span class="brand-sub">of New England</span></div>
+    <div class="title"><div class="t1">Sales Rep Scorecard</div><div class="t2">Month to Date &middot; Refreshed <strong id="refreshed">&mdash;</strong></div></div>
+  </header>
+  <div id="status" class="loading">Loading latest data&hellip;</div>
+  <div id="dashboard" style="display:none; flex:1; display:flex; flex-direction:column; min-height:0;">
+    <div class="kpi-row">
+      <div class="kpi"><div class="label">Net Revenue MTD</div><div class="value" id="kpi-rev">&mdash;</div><div class="sub" id="kpi-rev-sub">&mdash;</div></div>
+      <div class="kpi"><div class="label">Net Sold</div><div class="value" id="kpi-sold">&mdash;</div><div class="sub" id="kpi-sold-sub">&mdash;</div></div>
+      <div class="kpi"><div class="label">Net Close Rate</div><div class="value" id="kpi-close">&mdash;</div><div class="sub">Net Sold / Run</div></div>
+      <div class="kpi"><div class="label">Avg Ticket (NSLI)</div><div class="value" id="kpi-nsli">&mdash;</div><div class="sub">Per Run</div></div>
+      <div class="kpi"><div class="label">Appts Run</div><div class="value" id="kpi-run">&mdash;</div><div class="sub" id="kpi-run-sub">&mdash;</div></div>
+    </div>
+    <div class="card">
+      <h2>Rep Leaderboard (Revenue MTD)</h2>
+      <table id="rep-table"><thead><tr><th>Rep</th><th>Appts</th><th>Run</th><th>Sold</th><th>Net Close</th><th>NSLI</th><th>Revenue</th></tr></thead><tbody id="rep-body"></tbody></table>
+    </div>
+  </div>
+  <footer><div>Source: Salesforce Sales Rep MTD &middot; Refreshes daily at 9am &middot; Page reloads every 5 minutes</div><div id="file-name">&mdash;</div></footer>
+</div>
+<script>
+const CSV_URL = 'data/sales-rep-mtd.csv?cb=' + Date.now();
+function fmtMoney(n){if(!isFinite(n))return '—';if(n>=1000000)return '$'+(n/1000000).toFixed(2)+'M';if(n>=1000)return '$'+(n/1000).toFixed(1)+'K';return '$'+n.toLocaleString(undefined,{maximumFractionDigits:0});}
+function fmtMoneyFull(n){if(!isFinite(n))return '—';return '$'+n.toLocaleString(undefined,{maximumFractionDigits:0});}
+function fmtPct(n){if(!isFinite(n))return '—';return Math.round(n*100)+'%';}
+function fmtNum(n){if(!isFinite(n))return '—';return n.toLocaleString();}
+function parseCsv(text){const lines=text.split(/\r?\n/).map(l=>l.trimEnd()).filter(l=>l.length>0);if(lines.length<2)return{headers:[],rows:[]};const headers=lines[0].split(',').map(h=>h.trim());const rows=lines.slice(1).map(line=>{const cells=line.split(',').map(c=>c.trim());const obj={};headers.forEach((h,i)=>{obj[h]=cells[i];});return obj;});return{headers,rows};}
+function row2num(r){return{Rep:r.Rep,Appts:parseFloat(r.Appts)||0,Run:parseFloat(r.Run)||0,Present:parseFloat(r.Present)||0,Sold:parseFloat(r.Sold)||0,NetSold:parseFloat(r.NetSold)||0,DemoPct:parseFloat(r.DemoPct)||0,NSLI:parseFloat(r.NSLI)||0,NetCloseRate:parseFloat(r.NetCloseRate)||0,Revenue:parseFloat(r.Revenue)||0};}
+function pillClass(rate,companyRate){if(rate>=companyRate)return 'good';if(rate>=companyRate*0.5)return 'neutral';return 'warn';}
+function renderTable(reps,total,companyRate){const body=document.getElementById('rep-body');body.innerHTML='';const sorted=[...reps].sort((a,b)=>b.Revenue-a.Revenue);sorted.forEach((r,idx)=>{const tr=document.createElement('tr');const rankCls=idx<3?'rank top':'rank';tr.innerHTML='<td class="rep-name"><span class="'+rankCls+'">'+(idx+1)+'.</span>'+r.Rep+'</td><td>'+fmtNum(r.Appts)+'</td><td>'+fmtNum(r.Run)+'</td><td>'+fmtNum(r.Sold)+'</td><td><span class="pill '+pillClass(r.NetCloseRate,companyRate)+'">'+fmtPct(r.NetCloseRate)+'</span></td><td>'+fmtMoneyFull(r.NSLI)+'</td><td><strong>'+fmtMoneyFull(r.Revenue)+'</strong></td>';body.appendChild(tr);});const totalTr=document.createElement('tr');totalTr.className='total';totalTr.innerHTML='<td>TEAM TOTAL</td><td>'+fmtNum(total.Appts)+'</td><td>'+fmtNum(total.Run)+'</td><td>'+fmtNum(total.Sold)+'</td><td>'+fmtPct(companyRate)+'</td><td>'+fmtMoneyFull(total.NSLI)+'</td><td>'+fmtMoneyFull(total.Revenue)+'</td>';body.appendChild(totalTr);}
+async function boot(){try{const resp=await fetch(CSV_URL,{cache:'no-store'});if(!resp.ok)throw new Error('CSV fetch failed: HTTP '+resp.status);const text=await resp.text();const{rows}=parseCsv(text);const all=rows.map(row2num);const totalRow=all.find(r=>r.Rep.toUpperCase()==='TOTAL');const reps=all.filter(r=>r.Rep.toUpperCase()!=='TOTAL'&&r.Rep.toUpperCase()!=='UNASSIGNED');const total=totalRow||{Appts:reps.reduce((s,r)=>s+r.Appts,0),Run:reps.reduce((s,r)=>s+r.Run,0),Sold:reps.reduce((s,r)=>s+r.Sold,0),NetSold:reps.reduce((s,r)=>s+r.NetSold,0),NSLI:0,NetCloseRate:0,Revenue:reps.reduce((s,r)=>s+r.Revenue,0)};const companyClose=total.NetCloseRate||(total.Run?total.NetSold/total.Run:0);const companyNsli=total.NSLI||(total.Run?total.Revenue/total.Run:0);document.getElementById('kpi-rev').textContent=fmtMoney(total.Revenue);document.getElementById('kpi-rev-sub').textContent=fmtMoneyFull(total.Revenue);document.getElementById('kpi-sold').textContent=fmtNum(total.NetSold);document.getElementById('kpi-sold-sub').textContent='Gross: '+fmtNum(total.Sold);document.getElementById('kpi-close').textContent=fmtPct(companyClose);document.getElementById('kpi-nsli').textContent=fmtMoneyFull(companyNsli);document.getElementById('kpi-run').textContent=fmtNum(total.Run);document.getElementById('kpi-run-sub').textContent='of '+fmtNum(total.Appts)+' appts';document.getElementById('refreshed').textContent=new Date().toLocaleString(undefined,{dateStyle:'medium',timeStyle:'short'});document.getElementById('status').style.display='none';document.getElementById('dashboard').style.display='flex';renderTable(reps,total,companyClose);}catch(err){const el=document.getElementById('status');el.className='err';el.textContent='Could not load dashboard data: '+(err&&err.message?err.message:String(err));}}
+boot();
+</script>
+</body>
+</html>
