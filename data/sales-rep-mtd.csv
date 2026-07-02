@@ -1,4 +1,12 @@
 Rep,Appts,Run,Present,Sold,NetSold,DemoPct,NSLI,NetCloseRate,Revenue
-Josephine Jarvis,1,0,0,0,0,0.00,0.00,0.00,0.00
-Unassigned,8,0,0,0,0,0.00,0.00,0.00,0.00
-TOTAL,9,0,0,0,0,0.00,0.00,0.00,0.00
+Nathaniel Hautala,3,2,2,1,1,1.00,12685.50,0.50,25371.00
+Valio Dimitrov,1,1,1,1,1,1.00,22751.68,1.00,22751.68
+Nathan Adams,1,1,1,1,1,1.00,16600.00,1.00,16600.00
+Trever Ferguson,1,0,0,0,0,0.00,0.00,0.00,0.00
+Michael Dusiewicz,1,1,1,0,0,1.00,0.00,0.00,0.00
+Maurice Campbell,2,1,1,0,0,1.00,0.00,0.00,0.00
+Mark Berns,1,1,1,0,0,1.00,0.00,0.00,0.00
+Josephine Jarvis,2,1,1,0,0,1.00,0.00,0.00,0.00
+Gary Fournier,1,1,1,0,0,1.00,0.00,0.00,0.00
+Unassigned,12,0,0,0,0,0.00,0.00,0.00,0.00
+TOTAL,25,9,9,3,3,1.00,7191.41,0.33,64722.68
